@@ -10,7 +10,15 @@
 
 .reveal .slides figure { text-align: center; }
 
+.centered p { text-align: center; }
+
 .reveal figcaption { display: none; }
+
+.reveal img { border: none; }
+
+.reveal section img { border: none; }
+
+.MathJax_Display { margin: 0; }
 
 </style>
 

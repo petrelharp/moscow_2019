@@ -3,7 +3,7 @@ SHELL := /bin/bash
 
 .PHONY : all clean setup
 
-moscow-march-2019.local.slides.html : setup
+moscow-march-2019.local.slides.html : setup figs/aurantiacus/dxy-pi-cor-by-time.png
 
 MATHJAX = https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js
 # change this to the location of your local MathJax.js library
@@ -64,15 +64,15 @@ SLIDES_OPTS = $(REVEALJS_OPTS)
 # Graphics whatnot
 
 # save inkscape svg files as .ink.svg and this'll do the right thing
-$(DISPLAYDIR)/%.svg : %.ink.svg
+%.svg : %.ink.svg
 	inkscape $< --export-plain-svg=$@
 
-$(DISPLAYDIR)/%.pdf : %.ink.svg
+%.pdf : %.ink.svg
 	inkscape $< --export-pdf=$@
 
-$(DISPLAYDIR)/%.svg : %.pdf
+%.svg : %.pdf
 	inkscape $< --export-plain-svg=$@
 
-$(DISPLAYDIR)/%.png : %.pdf
+%.png : %.pdf
 	convert -density 300 $< -flatten $@
 

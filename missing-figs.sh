@@ -8,6 +8,10 @@ do
     if [ -e $x ]
     then
         echo "."
+    elif [ -e ${x%png}.pdf ]
+    then
+        echo "making $x"
+        make $x
     else
         MISSING="$MISSING $x"
         echo $x

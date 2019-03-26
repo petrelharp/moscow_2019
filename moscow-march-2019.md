@@ -12,14 +12,66 @@ date: "Moscow, ID // March 2019"
 
 1. Two problems, about geography and evolution
 
-2. The challenge: better simulations
+2. Tree sequences 
 
-3. Genomic landscapes, across time
+    - for more and better simulations
 
-4. Some steps forward for spatial population genetics
+3. Some steps forward
 
+
+<!-- Tortoise intro -->
 
 # Problem #1
+
+## the Mojave Desert Tortoise
+
+*Gopherus agassizii:*
+
+::: {.centered}
+![a tortoise](figs/tortoise/tortoise-in-burrow.jpg){width=70%}
+:::
+
+## the Mojave Desert Tortoise
+
+::: {.centered}
+![range map](figs/tortoise/range-abundance-map.jpeg){width=70%}
+:::
+
+## the Mojave Desert Tortoise
+
+::: {.centered}
+![ivanpah](figs/tortoise/ivanpah-opens.png){width=70%}
+:::
+
+## the Mojave Desert Tortoise
+
+::: {.centered}
+![solar](figs/tortoise/latimes-torts-delay-solar.png){width=70%}
+:::
+
+## The question(s)
+
+
+::: {.columns}
+::::::: {.column width="50%"}
+
+1. How will changes to the landscape affect population viability and gene flow?
+
+2. How do tortoises move around on the landscape?
+
+:::
+::::::: {.column width="50%"}
+
+![](figs/tortoise/drecp-pref-alt-snapshot.png)
+
+:::
+:::::::
+
+
+
+<!-- Mimulus intro -->
+
+# Problem #2
 
 ## Genomic landscapes
 
@@ -62,11 +114,12 @@ Corbett-Detig et al 2015; Cutter & Payseur 2013
 
 Corbett-Detig et al 2015
 
+<!--
+
 -------------------
 
 ![Langley et al 2012](figs/from_the_literature/langley-et-al-2012-chr3-pi-and-rho.png)
 
-<!--
 -------------------
 
 ![McVicker et al 2009](figs/from_the_literature/mcvicker-2009-hu_chr1-landscape.png)
@@ -74,6 +127,22 @@ Corbett-Detig et al 2015
 
 McVicker et al 2009
 -->
+
+
+--------------
+
+linked selection
+
+: The indirect effects of selection on genomic locations
+  that are *linked* to the sites under selection by a lack of recombination.
+
+::: {.centered}
+
+![](figs/sweep_haps.png){.fragment width="40%"}
+![](figs/background_haps.png){.fragment width="40%"}
+
+:::
+
 
 The *Mimulus aurantiacus* species complex
 -----------------------------------------
@@ -83,11 +152,15 @@ The *Mimulus aurantiacus* species complex
 :::
 
 
+<!--
+
 ------------------
 
 ::: {.centered}
 ![](figs/aurantiacus/stankowski-color-cline.png){width=70%}
 :::
+
+-->
 
 ----------------------------------
 
@@ -123,22 +196,12 @@ The data:
 
 ---------------------
 
-![](figs/aurantiacus/cor-across-time-0.png)
-
----------------------
-
-![](figs/aurantiacus/cor-across-time-1.png)
-
----------------------
-
-![](figs/aurantiacus/cor-across-time-2.png)
+::: {.centered}
+![](figs/aurantiacus/dxy-pi-cor-by-time.png){width=60%}
+:::
 
 
-## Questions
-
-selection? how much? what kind? other options?
-
-## Conclusions
+## 
 
 - Emergence of landscape of diversity across $\approx$ 1.5 million years!
 
@@ -157,65 +220,11 @@ speed of evolution,
 trait architecture.
 
 
-<!-- Tortoise intro -->
-
-# Problem #2
-
-## the Mojave Desert Tortoise
-
-  *Gopherus agassizii:*
-  ![a tortoise](figs/tortoise/tortoise-in-burrow.jpg)
-
-## the Mojave Desert Tortoise
-
-  ![range map](figs/tortoise/range-abundance-map.jpeg)
-
-## the Mojave Desert Tortoise
-
-  ![ivanpah](figs/tortoise/ivanpah-opens.png)
-
-## the Mojave Desert Tortoise
-
-  ![solar](figs/tortoise/latimes-torts-delay-solar.png)
-
-## The question(s)
-
-
-::: {.columns}
-::::::: {.column width="50%"}
-
-1. How will changes to the landscape affect population viability and gene flow?
-
-2. How do tortoises move around on the landscape?
-
-:::
-::::::: {.column width="50%"}
-
-![](figs/tortoise/drecp-pref-alt-snapshot.png)
-
-:::
-:::::::
-
-
-
-
 
 
 <!-- section SIMULATION -->
 
 # Simulation: not as easy as you might think
-
------------------------------------------
-
-![mimulus phylogeny](figs/aurantiacus/phylogeny.png)
-
-------------------
-
-![mimulus color cline](figs/aurantiacus/stankowski-color-cline.png){width=70%}
-
-------------------
-
-![tortoise range map](figs/tortoise/range-abundance-map.jpeg)
 
 -----------------------------
 
@@ -287,9 +296,9 @@ A **tree sequence** describes this, er, sequence of trees.
 introduced the **tree sequence** data structure
 for a fast coalescent simulator, [msprime](https://github.com/jeromekelleher/msprime).
 
-- stores genealogical *and* variation data **very** compactly
+- stores sequence *and* genealogical data
 
-- efficient algorithms available:
+- tree differences allow **very** efficient
 
     * subsetting
     * calculation of allele frequencies in arbitrary cohorts
@@ -301,24 +310,18 @@ for a fast coalescent simulator, [msprime](https://github.com/jeromekelleher/msp
 
 ## Simulated file sizes
 
-::: {.columns}
-::::::: {.column width="50%"}
-
-![file sizes](figs/file_size.png)
-
+::: {.centered}
+![file sizes](figs/tsinfer_sizes.png){width=90%}
 :::
-::::::: {.column width="50%"}
 
-- HapMap chr1 genetic map (250Mb)
-- Gutenkunst et al out-of-Africa model (3 pops)
-- mutation rate $2 \times 10^{-8}$ per gen
-- at $n=10^7$ 
+from *Kelleher et al 2018, *Inferring the ancestry of everyone"*
 
-    * about 17 million variants
-    * VCF size: 318 TiB (250,000$\times$ larger)
+<!-- Estimated sizes of files required to store the genetic variation data for a
+simulated human-like chromosome (100 megabases) for up to 10 billion haploid
+(5 billion diploid) samples. Simulations were run for 10 1 up to 10 7 haplotypes
+using msprime [Kelleher et al., 2016], and the sizes of the resulting files plotted
+(points). -->
 
-:::
-:::::::
 
 ## Example: three samples; two trees; two variant sites
 
@@ -800,3 +803,64 @@ now with:
 *Runtime:* 8 hours
 
 
+# Genomic landscapes
+
+----------------------------------
+
+![https://www.biorxiv.org/content/early/2018/06/21/342352](figs/aurantiacus/preprint.png)
+
+----------------------------------
+
+![https://www.biorxiv.org/content/early/2018/06/21/342352](figs/aurantiacus/preprint_peeps.png)
+
+
+## The data
+
+![](figs/aurantiacus/phylogeny.png)
+
+## The data
+
+![](figs/aurantiacus/divergence_by_node_LG1.png)
+
+## Simulations
+
+::: {.columns}
+::::::: {.column width="70%"}
+
+- $N=10,000$ diploids
+- burn-in for $10N$ generations
+- population split followed by period sampling, with:
+    
+    * neutral
+    * background selection
+    * selection against introgressed alleles
+
+:::
+::::::: {.column width="30%"}
+
+![](figs/murillo.jpeg)
+
+:::
+:::::::
+
+
+------------------
+
+![](figs/aurantiacus/murillo_neutral.png)
+
+------------------
+
+![](figs/aurantiacus/murillo_selected.png)
+
+
+<!-- Spaaaace results -->
+
+# Spatial landscapes
+
+## Questions
+
+1. How does (continuous) space affect which population genetics signals?
+
+2. Does it depend on **sampling scheme**?
+
+3. 
