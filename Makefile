@@ -3,7 +3,7 @@ SHELL := /bin/bash
 
 .PHONY : all clean setup
 
-moscow-march-2019.slides.html : setup
+moscow-march-2019.local.slides.html : setup
 
 MATHJAX = https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js
 # change this to the location of your local MathJax.js library
