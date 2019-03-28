@@ -784,7 +784,7 @@ $$ \qquad {} = \text{a pain in the torus} $$
 
 ## A related pain
 
-**Coalescent theory** requires *random mating* in large populations,
+**Coalescent theory** requires *exchangeability* in large populations,
 because:
 
 > 1. Lineages must move *independently* until the coalesce, and
