@@ -226,13 +226,22 @@ trait architecture.
 
 # Simulation: not as easy as you might think
 
+## Simulations, to
+
+> - make predictions
+> 
+> - guide theory
+> 
+> - train inference methods
+
+
 -----------------------------
 
-To check predictions, we need simulations with:
+We need:
 
+- large populations with long genomes
 - many loci under selection
 - geographic population structure
-- large populations with long genomes
 
 for long enough to reach equilibrium ($\sim 10N$ generations).
 
@@ -268,6 +277,8 @@ nonneutral mutations possible at $10^5$ loci.
 For a set of sampled chromosomes,
 at each position along the genome there is a genealogical tree
 that says how they are related.
+
+. . .
 
 ![Trees along a chromosome](figs/sim_ts.anim.gif)
 
@@ -456,9 +467,9 @@ Every time an individual is born, we must:
 
 ::: incremental
 
-1. add each gamete to the Node Table,
+1. add each contributing gamete to the Node Table,
 2. add entries to the Edge Table
-    recording which parent each gamete inherited each bit of genome from, and
+    recording which parental copy each inherited each bit of genome from, and
 3. add any new selected mutations to the Mutation Table 
     and (if necessary) their locations to the Site Table.
 

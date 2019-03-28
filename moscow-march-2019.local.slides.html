@@ -241,13 +241,20 @@ On how many targets?</li>
 <!-- section SIMULATION -->
 </div>
 </section></section>
-<section><section id="simulation-not-as-easy-as-you-might-think" class="title-slide slide level1"><h1>Simulation: not as easy as you might think</h1></section><section class="slide level2">
-
-<p>To check predictions, we need simulations with:</p>
+<section><section id="simulation-not-as-easy-as-you-might-think" class="title-slide slide level1"><h1>Simulation: not as easy as you might think</h1></section><section id="simulations-to" class="slide level2">
+<h2>Simulations, to</h2>
 <ul>
+<li class="fragment"><p>make predictions</p></li>
+<li class="fragment"><p>guide theory</p></li>
+<li class="fragment"><p>train inference methods</p></li>
+</ul>
+</section><section class="slide level2">
+
+<p>We need:</p>
+<ul>
+<li>large populations with long genomes</li>
 <li>many loci under selection</li>
 <li>geographic population structure</li>
-<li>large populations with long genomes</li>
 </ul>
 <p>for long enough to reach equilibrium (<span class="math inline">\(\sim 10N\)</span> generations).</p>
 <div class="fragment">
@@ -270,9 +277,11 @@ On how many targets?</li>
 </section><section id="history-is-a-sequence-of-trees" class="slide level2">
 <h2>History is a sequence of trees</h2>
 <p>For a set of sampled chromosomes, at each position along the genome there is a genealogical tree that says how they are related.</p>
+<div class="fragment">
 <figure>
 <img data-src="figs/sim_ts.anim.gif" alt="Trees along a chromosome" /><figcaption>Trees along a chromosome</figcaption>
 </figure>
+</div>
 </section><section class="slide level2">
 
 <p>A <strong>tree sequence</strong> describes this, er, sequence of trees.</p>
@@ -309,6 +318,7 @@ On how many targets?</li>
 <img data-src="figs/tsinfer_sizes.png" alt="file sizes" style="width:90.0%" /><figcaption>file sizes</figcaption>
 </figure>
 </div>
+<p>from <em>Kelleher et al 2018, </em>Inferring the ancestry of everyone"*</p>
 <!-- Estimated sizes of files required to store the genetic variation data for a
 simulated human-like chromosome (100 megabases) for up to 10 billion haploid
 (5 billion diploid) samples. Simulations were run for 10 1 up to 10 7 haplotypes
@@ -430,8 +440,8 @@ using msprime [Kelleher et al., 2016], and the sizes of the resulting files plot
 <p>Every time an individual is born, we must:</p>
 <div>
 <ol type="1">
-<li class="fragment">add each gamete to the Node Table,</li>
-<li class="fragment">add entries to the Edge Table recording which parent each gamete inherited each bit of genome from, and</li>
+<li class="fragment">add each contributing gamete to the Node Table,</li>
+<li class="fragment">add entries to the Edge Table recording which parental copy each inherited each bit of genome from, and</li>
 <li class="fragment">add any new selected mutations to the Mutation Table and (if necessary) their locations to the Site Table.</li>
 </ol>
 </div>
