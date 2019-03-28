@@ -1,5 +1,5 @@
 ---
-title: "Spatial population genetics"
+title: "Landscapes in population genetics"
 subtitle: "ecology, evolution, and simulation"
 author: "Peter Ralph"
 date: "Moscow, ID // March 2019"
@@ -16,12 +16,12 @@ date: "Moscow, ID // March 2019"
 
     - for more and better simulations
 
-3. Some steps forward
+3. Geographical methods, and some results
 
 
 <!-- Tortoise intro -->
 
-# Problem #1
+# Problem #1: geography
 
 ## the Mojave Desert Tortoise
 
@@ -71,7 +71,7 @@ date: "Moscow, ID // March 2019"
 
 <!-- Mimulus intro -->
 
-# Problem #2
+# Problem #2: selection
 
 ## Genomic landscapes
 
@@ -143,81 +143,18 @@ linked selection
 
 :::
 
+----------------------
 
-The *Mimulus aurantiacus* species complex
------------------------------------------
-
-::: {.centered}
-![](figs/aurantiacus/phylogeny.png)
-:::
-
-
-<!--
-
-------------------
-
-::: {.centered}
-![](figs/aurantiacus/stankowski-color-cline.png){width=70%}
-:::
-
--->
-
-----------------------------------
-
-![https://www.biorxiv.org/content/early/2018/06/21/342352](figs/aurantiacus/preprint.png)
-
-----------------------------------
-
-![https://www.biorxiv.org/content/early/2018/06/21/342352](figs/aurantiacus/preprint_peeps.png)
-
-
-
--------------------------
-
-The data:
-
-- chromosome-level genome assembly
-- $20\times$ coverage of 8 taxa and outgroup (*M.clevelandii*)
-- diversity ($\pi$), divergence ($d_{xy}$),
-    and differentiation ($F_{ST}$) in windows
-- 36 pairwise comparisons among 9 taxa
-- estimates of recombination rate and gene density
-    from map and annotation
-
-<!--
-## A spectrum of differentiation
-
-![](figs/aurantiacus/distributions.png)
--->
-
--------------------
-
-![](figs/aurantiacus/lg1.png)
-
----------------------
-
-::: {.centered}
-![](figs/aurantiacus/dxy-pi-cor-by-time.png){width=60%}
-:::
-
-
-## 
-
-- Emergence of landscape of diversity across $\approx$ 1.5 million years!
-
-- Shared targets of linked selection across taxa?
-
-. . .
-
-- But, what *kind* of linked selection? \
-    How strongly and frequently does it act? \
-    On how many targets?
+- But, what *kind* of linked selection? 
+- How strongly and frequently does it act? 
+- On how many targets?
 
 . . .
 
 Consequences for: genetic load/disease,
 speed of evolution,
 trait architecture.
+
 
 
 
@@ -338,16 +275,6 @@ using msprime [Kelleher et al., 2016], and the sizes of the resulting files plot
 
 ![Example tree sequence](figs/example_tree_sequence.png)
 
------------------------
-
-Storing a tree sequence in
-the four tables - *nodes*, *edges*, *sites*, and *mutations* -
-is *succinct* (no redundancy).
-
-. . .
-
-These are stored efficiently on disk
-with a bit more information (e.g., metadata).
 
 
 ## Nodes and edges
@@ -470,7 +397,7 @@ Every time an individual is born, we must:
 1. add each contributing gamete to the Node Table,
 2. add entries to the Edge Table
     recording which parental copy each inherited each bit of genome from, and
-3. add any new selected mutations to the Mutation Table 
+3. add any new non-neutral mutations to the Mutation Table 
     and (if necessary) their locations to the Site Table.
 
 :::
@@ -634,6 +561,8 @@ to the history of the *samples*:
 ![Simplified Wright-Fisher tree sequence](figs/sim_wf_simplified.anim.gif)
 
 
+# Implementation and results
+
 ## *Revised* tree recording strategy
 
 Every time an individual is born, we must:
@@ -642,7 +571,7 @@ Every time an individual is born, we must:
 1. add each gamete to the Node Table,
 2. add entries to the Edge Table
     recording which parent each gamete inherited each bit of genome from
-3. add any new mutations to the Mutation Table 
+3. add any new **non-neutral** mutations to the Mutation Table 
     and (if necessary) their locations to the Site Table.
 
 ... and,
@@ -650,14 +579,25 @@ Every time an individual is born, we must:
 4. Every so often, *simplify* the tables so far,
     retaining the history of the current generation.
 
+. . .
+
+5. At the end, add neutral mutations.
+
+. . .
+
+*Result:* whole genome sequence *and* all the genealogical trees.
 
 
-# Implementation and results
 
-## Benchmark implementation
+## Implementation
 
-- Recording, simplifying, and output of tables: 
-    `C` code in `msprime`.
+[`tskit`](https://github.com/tskit-dev/tskit)
+
+: *many* tools for working with tree sequences
+
+. . .
+
+Benchmark implementation
 
 - Simulation: [`fwdpp`](https://github.com/molpopgen/fwdpp), by Kevin Thornton (in `C++`) ([code](https://github.com/molpopgen/fwdpy11_arg_example))
 
@@ -724,7 +664,7 @@ $$
 
 ----------------
 
-To check predictions, we **still** need simulations with:
+We **still** need simulations with:
 
 - many loci under selection
 - **geographic population structure**
@@ -780,10 +720,15 @@ now with:
 
 
 
-## ... now with tree sequence recording!
+## ... and, tree sequence recording!
 
 
 ![](figs/slim_preprint.png)
+
+## ... and, tree sequence recording!
+
+
+![](figs/slim_preprint_peeps.png)
 
 
 ## A 100x speedup:
@@ -814,7 +759,484 @@ now with:
 *Runtime:* 8 hours
 
 
-# Genomic landscapes
+# Geography
+
+
+## 
+
+$$ \text{Wright-Fisher} + \text{geography} $$
+
+. . .
+
+$$ \qquad {} = \text{a pain in the torus} $$
+
+. . .
+
+*Felensestein, 1975*
+
+## The pain
+
+<center>
+<video width="600" height="600" controls>
+  <source src="figs/spaceness/pain.500.anim.mp4" type="video/mp4">
+</video>
+</center>
+
+## A related pain
+
+**Coalescent theory** requires *random mating* in large populations,
+because:
+
+> 1. Lineages must move *independently* until the coalesce, and
+> 2. if we know one offspring came from a certain location,
+> 3. that location may be more likely to be the source of others.
+
+. . .
+
+::: {.columns}
+::::::: {.column width="25%"}
+
+![](figs/spaceness/finger_right.png){width=90%}
+
+:::
+::::::: {.column width="75%"}
+
+We need **forward simulation** for realistic geography.
+
+:::
+:::::::
+
+## The promise
+
+Geography could add a *lot* of information.
+
+. . .
+
+With $n$ samples and no geography, there are $n$ informative entries in the SFS.
+
+. . .
+
+With georeferenced data, each of the $n(n-1)/2$ different pairwise divergences
+provide different information.
+
+-------------
+
+![](figs/torts/pwp_etort-191_shaded.png)
+
+-------------
+
+![](figs/torts/pwp_etort-229_shaded.png)
+
+-------------
+
+![](figs/torts/pwp_etort-240_shaded.png)
+
+-------------
+
+![](figs/torts/pwp_etort-253_shaded.png)
+
+-------------
+
+![](figs/torts/pwp_etort-273_shaded.png)
+
+-------------
+
+![](figs/torts/pwp_etort-27_shaded.png)
+
+-------------
+
+![](figs/torts/pwp_etort-283_shaded.png)
+
+-------------
+
+![](figs/torts/pwp_etort-285_shaded.png)
+
+-------------
+
+![](figs/torts/pwp_etort-35_shaded.png)
+
+-------------
+
+![](figs/torts/pwp_etort-57_shaded.png)
+
+-------------
+
+![](figs/torts/pwp_etort-71_shaded.png)
+
+-------------
+
+![](figs/torts/pwp_etort-78_shaded.png)
+
+
+# Modeling
+
+## 
+
+<center>
+
+The earth is not flat.
+
+</center>
+
+. . .
+
+<center>
+
+barriers, currents, microclimates ...
+
+</center>
+
+
+. . .
+
+<center>
+
+Population regulation is **local**.
+
+</center>
+
+
+
+
+
+## Interactions
+
+
+::: {.columns}
+::::::: {.column width="50%"}
+
+Based on *interaction kernels*, e.g.
+$$
+    \rho(r) = \frac{1}{2 \pi \sigma^2} e^{- r^2 / 2 \sigma^2}
+$$
+
+applied to the distance to the other individual.
+
+:::
+::::::: {.column width="50%"}
+
+![](figs/spaceness/koopas.png){width=100%}
+
+:::
+:::::::
+
+
+## Interactions
+
+
+::: {.columns}
+::::::: {.column width="50%"}
+
+Based on *interaction kernels*, e.g.
+$$
+    \rho(r) = \frac{1}{2 \pi \sigma^2} e^{- r^2 / 2 \sigma^2}
+$$
+
+applied to the distance to the other individual.
+
+
+:::
+::::::: {.column width="50%"}
+
+![](figs/spaceness/koopa_interactions.png){width=100%}
+
+:::
+:::::::
+
+
+##  
+
+::: {.columns}
+::::::: {.column width="50%"}
+
+1. **Mate choice:** 
+
+    individual $i$ chooses partner $j$ at distance $d_{ij}$ 
+    with probability proportional to $\rho(d_{ij})$.
+
+:::
+::::::: {.column width="50%"}
+
+![](figs/spaceness/koopas_mates.png){width=100%}
+
+:::
+:::::::
+
+
+##  
+
+::: {.columns}
+::::::: {.column width="50%"}
+
+2. **Dispersal:** 
+
+    offspring live near their parents.
+
+:::
+::::::: {.column width="50%"}
+
+![](figs/spaceness/koopas_dispersal.png){width=100%}
+
+:::
+:::::::
+
+
+##  
+
+::: {.columns}
+::::::: {.column width="50%"}
+
+3. **Population regulation:**
+
+    with local density
+    $$ D_i = \sum_j \rho(d_{ij}) , $$
+
+    - *survival*, 
+    - *fecundity*, and/or 
+    - *establishment* 
+
+    decrease with $D$.
+
+:::
+::::::: {.column width="50%"}
+
+![](figs/spaceness/koopas_density.png){width=100%}
+
+:::
+:::::::
+
+
+## Computation
+
+To do this, we need to know
+$$ \rho(\|x_i - x_j\|) $$
+for each pair $(i,j)$ of individuals.
+
+. . .
+
+This is...
+
+. . .
+
+<center>
+*(cue dramatic music)*
+</center>
+
+. . .
+
+$$ O(N^2) $$
+
+
+## Computation
+
+To do this, we need to know
+$$ \rho(\|x_i - x_j\|) $$
+for each pair of **nearby** individuals.
+
+. . .
+
+... say, for all pairs with $\|x_i - x_j\| \le 3 \sigma$.
+
+. . .
+
+A $k$-d tree
+
+: allows finding all points within distance $3\sigma$ in $\log(N)$-time.
+
+Computation time scales with $N M \log(N)$, 
+where $M$ is the number of neighbors within distance $3\sigma$.
+
+
+
+# But does it matter?
+
+## 
+
+::: {.columns}
+::::::: {.column width="50%"}
+
+<center>
+
+![](figs/spaceness/cjb.jpg){width=80%}
+
+CJ Battey
+
+</center>
+
+:::
+::::::: {.column width="50%"}
+
+<center>
+
+![](figs/spaceness/kern.jpg){width=80%}
+
+Andy Kern
+
+</center>
+
+:::
+:::::::
+
+
+## Simulations
+
+> 1. Flat, square habitat.
+> 2. Neutral.
+> 3. Mate choice: proportional to $e^{-d_{ij}^2 /2 \sigma_m^2}$.
+> 4. Poisson(1/4) offspring each time step.
+> 5. ... which disperse a Normal$(0, \sigma_d)$ distance.
+> 6. Local density for $i$ computed as:
+>     $$ D_i = \frac{1}{2 \pi \sigma_i^2} \sum_{j \neq i} e^{-d_{ij}^2 /2 \sigma_i^2} , $$
+> 7. Probability of survival: with $K=5$,
+>     $$ \min(0.95, 1/(1 + D_i / 5 K) . $$
+> 8. $10^8$ bp with recomb rate $10^{-9}$; neutral mutations on the tree sequence after.
+
+
+## An important parameter
+
+Wright's neighborhood size
+
+: the mean number of individuals in a circle of radius $2 \sigma$ .
+
+## Sampling schemes matter!
+
+::: {.centered}
+![](figs/spaceness/sampling_maps.png){width=90%}
+:::
+
+## Popgen statistics
+
+::: {.centered}
+![](figs/spaceness/het_by_ns.png){width=80%}
+:::
+
+
+## Trait distributions
+
+
+::: {.centered}
+![](figs/spaceness/gwas_traits.png){width=80%}
+:::
+
+
+## GWAS false positives
+
+::: {.centered}
+![](figs/spaceness/gwas_snps.png){width=80%}
+:::
+
+
+# Wrap-up
+
+## 
+
+> 1. Learning about geography
+> 2. and/or ubiquitous selection
+> 3. is hard.
+> 4. But, it matters!
+> 5. And, now we have better tools!
+> 6. Also, tree sequences are great.
+
+##
+
+Thank you!!
+
+
+# Spatial simulations
+
+## $\sigma_d = \sigma_i = \sigma_m = 2$
+
+<center>
+<video width="600" height="600" controls>
+  <source src="figs/spaceness/flat.500.anim.mp4" type="video/mp4">
+</video>
+</center>
+
+## $\sigma_d = \sigma_i = \sigma_m = 2$
+
+::: {.columns}
+::::::: {.column width="50%"}
+
+![](figs/spaceness/flat.500.anim.last.png){width=600}
+
+:::
+::::::: {.column width="50%"}
+
+![](figs/spaceness/waves.100000.ibd.png)
+
+:::
+:::::::
+
+## $\sigma_d = 0.15$, $\sigma_i = \sigma_m = 0.5$
+
+<center>
+<video width="600" height="600" controls>
+  <source src="figs/spaceness/metapops.500.anim.mp4" type="video/mp4">
+</video>
+</center>
+
+## $\sigma_d = 0.15$, $\sigma_i = \sigma_m = 0.5$
+
+::: {.columns}
+::::::: {.column width="50%"}
+
+![](figs/spaceness/metapops.500.anim.last.png){width=600}
+
+:::
+::::::: {.column width="50%"}
+
+![](figs/spaceness/metapops.100000.ibd.png)
+
+:::
+:::::::
+
+
+## $\sigma_d = 0.25$, $\sigma_i = \sigma_m = 0.2$
+
+<center>
+<video width="600" height="600" controls>
+  <source src="figs/spaceness/patchy.500.anim.mp4" type="video/mp4">
+</video>
+</center>
+
+
+## $\sigma_d = 0.25$, $\sigma_i = \sigma_m = 0.2$
+
+::: {.columns}
+::::::: {.column width="50%"}
+
+![](figs/spaceness/patchy.500.anim.last.png){width=600}
+
+:::
+::::::: {.column width="50%"}
+
+![](figs/spaceness/patchy.100000.ibd.png)
+
+:::
+:::::::
+
+
+
+
+# Landscapes over time
+
+The *Mimulus aurantiacus* species complex
+-----------------------------------------
+
+::: {.centered}
+![](figs/aurantiacus/phylogeny.png)
+:::
+
+
+<!--
+
+------------------
+
+::: {.centered}
+![](figs/aurantiacus/stankowski-color-cline.png){width=70%}
+:::
+
+-->
 
 ----------------------------------
 
@@ -825,9 +1247,57 @@ now with:
 ![https://www.biorxiv.org/content/early/2018/06/21/342352](figs/aurantiacus/preprint_peeps.png)
 
 
-## The data
 
-![](figs/aurantiacus/phylogeny.png)
+-------------------------
+
+The data:
+
+- chromosome-level genome assembly
+- $20\times$ coverage of 8 taxa and outgroup (*M.clevelandii*)
+- diversity ($\pi$), divergence ($d_{xy}$),
+    and differentiation ($F_{ST}$) in windows
+- 36 pairwise comparisons among 9 taxa
+- estimates of recombination rate and gene density
+    from map and annotation
+
+<!--
+## A spectrum of differentiation
+
+![](figs/aurantiacus/distributions.png)
+-->
+
+-------------------
+
+![](figs/aurantiacus/lg1.png)
+
+---------------------
+
+::: {.centered}
+![](figs/aurantiacus/dxy-pi-cor-by-time.png){width=60%}
+:::
+
+
+## 
+
+- Emergence of landscape of diversity across $\approx$ 1.5 million years!
+
+- Shared targets of linked selection across taxa?
+
+. . .
+
+- But, what *kind* of linked selection? \
+    How strongly and frequently does it act? \
+    On how many targets?
+
+. . .
+
+Consequences for: genetic load/disease,
+speed of evolution,
+trait architecture.
+
+
+
+
 
 ## The data
 
@@ -863,15 +1333,3 @@ now with:
 
 ![](figs/aurantiacus/murillo_selected.png)
 
-
-<!-- Spaaaace results -->
-
-# Spatial landscapes
-
-## Questions
-
-1. How does (continuous) space affect which population genetics signals?
-
-2. Does it depend on **sampling scheme**?
-
-3. 
